@@ -3,14 +3,14 @@ ROM Name | compatibility | Errors							| Wellknow Parameters
 
 15PUZZLE   | Full Working  | NA 							| 
 
-BLINKY	   |	Dont Run   | Black Screen				 	| 
+BLINKY	   |  Dont Run	   | Black Screen				 		| 
 
-BRIX	   |	Good	   | Paddle Collision not perfect 	|
+BRIX	   |	Good	   | Paddle Collision not perfect			 	| Speed: 400
 
 CONNECT4   | Full Working  | NA								| Speed: 100
 
-GUESS	   | Full Working  | Not Know						|
+GUESS	   | Full Working  | Not Know							|
 
 MAZE	   | Full Working  | NA								|
 
-PUZZLE	   | Full Working  | Not Know						|
+PUZZLE	   | Full Working  | Not Know							|

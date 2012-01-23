@@ -252,7 +252,7 @@ def reset_emulator():
 		PC = RAM_offset
 		
 #load_rom("15 Puzzles")
-load_rom("ROMs\\BRIX")
+load_rom("ROMs//GUESS")
 	
 keydown = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
