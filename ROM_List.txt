@@ -1,16 +1,25 @@
-ROM Name | compatibility | Errors							| Wellknow Parameters
+ROM Name   | Compatibility | 			Errors				| Wellknow Parameters
 ------------------------------------------------------------------------------------------------
 
-15PUZZLE   | Full Working  | NA 							| 
+15PUZZLE   | Full Working  |	 						| 
 
-BLINKY	   |  Dont Run	   | Black Screen				 		| 
+BLINKY	   |	Dont Run   | Black Screen				 	| 
 
-BRIX	   |	Good	   | Paddle Collision not perfect			 	| Speed: 400
+BRIX	   |	 Good	   | Paddle Collision not perfect			|
 
-CONNECT4   | Full Working  | NA								| Speed: 100
+CONNECT4   | Full Working  |							| Speed: 100
 
-GUESS	   | Full Working  | Not Know							|
+GUESS	   | Full Working  |							|
 
-MAZE	   | Full Working  | NA								|
+HIDDEN	   | Full Working  |							| Speed: <400
 
-PUZZLE	   | Full Working  | Not Know							|
+INVADERS   | 	Partial    | Timing Problems, Grafik errors			|
+
+KALEID	   | Full Working  | 							|
+
+MAZE	   | Full Working  | 							|
+
+MERLIN	   | Full Working  | 							| Speed: 100
+
+PUZZLE	   | Full Working  | 							|
+

@@ -2,4 +2,46 @@ Chip8 Emulator by Iron Hand
 ---------------------------
 
         
+This is an Chip-8 interpreter in pygame. Works under Windows and UNIX systems.
 
+Emulator Setting Keys:
+----------------------
+
+F2 - Reset current loaded ROM 
+
+F3 - Open the ROM load command line
+	-cd - change directory
+	-ls - list elements in current directory
+	-load <romname> - load the ROM file
+
+F9 - change the keybord layout
+	-0 - standart layout (means the standart on original Chip-8 hardware keyboard)
+	-1 - 28switch layout (switch the 2 and the 8 keys)
+
+F10 or m - set emulation speed to maximum (F10 maybe dont work under Linux)
+
+F11 - decrease emulation speed by 100 (strg+F11 decrease by 10)
+
+F12 - increase emulation speed by 100 (strg+F11 increase by 10)
+
+Space or p - pause the emulation
+
+d - pause emulation and open the debugger
+	-Debugger commands:
+		-<enter> - next opcode
+		-ram - show the hole RAM
+		-dd - debug data in decimal
+		-dh - debug data in hex
+
+Esc - close the emulator
+
+You can combine the keys. So you can press F3 and d and the next loaded ROM will start from first line in the debugger.
+
+Show the ROM_list.txt for compatibility of testet ROM files.
+
+Precommands:
+------------
+
+Start the emulator with follow commands.
+
+-d - start emulator with debugger (just for developers, dont work with current version)

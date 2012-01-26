@@ -5,8 +5,8 @@
 import pygame, sys
 import pygame.locals
 import pygame.gfxdraw
-import tkFileDialog
 import random
+import os
 
 pygame.init()
 mainClock = pygame.time.Clock()
@@ -27,12 +27,26 @@ pixel_fill = 0
 MainClockSpeed = 400
 #Debugg Switch
 debugger_on = False
-
+#Path to the loaded ROM file
+rom_name = ""
+#Keyboard Layouts > 0=standart, 1=28switch
+keylayout = 0
+#Keyboard Layout Init - "standart" means the Chip8 Keyboard Standart
+def keylayout_init():
+	global two, eight
+	
+	if keylayout == 0:
+		two = 8
+		eight = 2
+	elif keylayout == 1:
+		two = 2
+		eight = 8
+		
 #Main Windows Options, calculate windows size from pixel size
 WINDOWWIDTH = 64*pixel_size
 WINDOWHEIGHT = 32*pixel_size
 windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
-pygame.display.set_caption('Chyp-8')
+pygame.display.set_caption('ChiPy-8')
 
 #Colors
 BLACK = (0, 0, 0)
@@ -70,102 +84,106 @@ STACK = []
 RAM = []
 RAM.extend(["00"] * RAM_offset)
 
-#0
-RAM[0] = "f0"
-RAM[1] = "90"
-RAM[2] = "90"
-RAM[3] = "90"
-RAM[4] = "f0"
-#1
-RAM[5] = "20"
-RAM[6] = "60"
-RAM[7] = "20"
-RAM[8] = "20"
-RAM[9] = "70"
-#2
-RAM[10] = "f0"
-RAM[11] = "10"
-RAM[12] = "f0"
-RAM[13] = "80"
-RAM[14] = "f0"
-#3
-RAM[15] = "f0"
-RAM[16] = "10"
-RAM[17] = "f0"
-RAM[18] = "10"
-RAM[19] = "f0"
-#4
-RAM[20] = "90"
-RAM[21] = "90"
-RAM[22] = "f0"
-RAM[23] = "10"
-RAM[24] = "10"
-#5
-RAM[25] = "f0"
-RAM[26] = "80"
-RAM[27] = "F0"
-RAM[28] = "10"
-RAM[29] = "f0"
-#6
-RAM[30] = "f0"
-RAM[31] = "80"
-RAM[32] = "f0"
-RAM[33] = "90"
-RAM[34] = "f0"
-#7
-RAM[35] = "f0"
-RAM[36] = "10"
-RAM[37] = "20"
-RAM[38] = "40"
-RAM[39] = "40"
-#8
-RAM[40] = "f0"
-RAM[41] = "90"
-RAM[42] = "f0"
-RAM[43] = "90"
-RAM[44] = "f0"
-#9
-RAM[45] = "f0"
-RAM[46] = "90"
-RAM[47] = "f0"
-RAM[48] = "10"
-RAM[49] = "f0"
-#A
-RAM[50] = "f0"
-RAM[51] = "90"
-RAM[52] = "f0"
-RAM[53] = "90"
-RAM[54] = "90"
-#B
-RAM[55] = "e0"
-RAM[56] = "90"
-RAM[57] = "e0"
-RAM[58] = "90"
-RAM[59] = "e0"
-#C
-RAM[60] = "f0"
-RAM[61] = "80"
-RAM[62] = "80"
-RAM[63] = "80"
-RAM[64] = "f0"
-#D
-RAM[65] = "e0"
-RAM[66] = "90"
-RAM[67] = "90"
-RAM[68] = "90"
-RAM[69] = "e0"
-#E
-RAM[70] = "f0"
-RAM[71] = "80"
-RAM[72] = "f0"
-RAM[73] = "80"
-RAM[74] = "f0"
-#F
-RAM[75] = "f0"
-RAM[76] = "80"
-RAM[77] = "f0"
-RAM[78] = "80"
-RAM[79] = "80"
+#Write the local Binaris in the RAM for Display the Numbers
+def local_ram_init():
+	global RAM
+	
+	#0
+	RAM[0] = "f0"
+	RAM[1] = "90"
+	RAM[2] = "90"
+	RAM[3] = "90"
+	RAM[4] = "f0"
+	#1
+	RAM[5] = "20"
+	RAM[6] = "60"
+	RAM[7] = "20"
+	RAM[8] = "20"
+	RAM[9] = "70"
+	#2
+	RAM[10] = "f0"
+	RAM[11] = "10"
+	RAM[12] = "f0"
+	RAM[13] = "80"
+	RAM[14] = "f0"
+	#3
+	RAM[15] = "f0"
+	RAM[16] = "10"
+	RAM[17] = "f0"
+	RAM[18] = "10"
+	RAM[19] = "f0"
+	#4
+	RAM[20] = "90"
+	RAM[21] = "90"
+	RAM[22] = "f0"
+	RAM[23] = "10"
+	RAM[24] = "10"
+	#5
+	RAM[25] = "f0"
+	RAM[26] = "80"
+	RAM[27] = "F0"
+	RAM[28] = "10"
+	RAM[29] = "f0"
+	#6
+	RAM[30] = "f0"
+	RAM[31] = "80"
+	RAM[32] = "f0"
+	RAM[33] = "90"
+	RAM[34] = "f0"
+	#7
+	RAM[35] = "f0"
+	RAM[36] = "10"
+	RAM[37] = "20"
+	RAM[38] = "40"
+	RAM[39] = "40"
+	#8
+	RAM[40] = "f0"
+	RAM[41] = "90"
+	RAM[42] = "f0"
+	RAM[43] = "90"
+	RAM[44] = "f0"
+	#9
+	RAM[45] = "f0"
+	RAM[46] = "90"
+	RAM[47] = "f0"
+	RAM[48] = "10"
+	RAM[49] = "f0"
+	#A
+	RAM[50] = "f0"
+	RAM[51] = "90"
+	RAM[52] = "f0"
+	RAM[53] = "90"
+	RAM[54] = "90"
+	#B
+	RAM[55] = "e0"
+	RAM[56] = "90"
+	RAM[57] = "e0"
+	RAM[58] = "90"
+	RAM[59] = "e0"
+	#C
+	RAM[60] = "f0"
+	RAM[61] = "80"
+	RAM[62] = "80"
+	RAM[63] = "80"
+	RAM[64] = "f0"
+	#D
+	RAM[65] = "e0"
+	RAM[66] = "90"
+	RAM[67] = "90"
+	RAM[68] = "90"
+	RAM[69] = "e0"
+	#E
+	RAM[70] = "f0"
+	RAM[71] = "80"
+	RAM[72] = "f0"
+	RAM[73] = "80"
+	RAM[74] = "f0"
+	#F
+	RAM[75] = "f0"
+	RAM[76] = "80"
+	RAM[77] = "f0"
+	RAM[78] = "80"
+	RAM[79] = "80"
 
 #Display
 #The original implementation of the Chip-8 language used a 64x32-pixel monochrome display with this format
@@ -217,24 +235,36 @@ def debug_out(format):
 
 #print the RAM Data
 def ram_out():
-	print RAM
+	rambyte_count = 0
+	bytes = ""
+	for byte in RAM:
+		if byte != "00":
+			bytes += byte + " "
+		if rambyte_count == 20:
+			print bytes
+			bytes = ""
+			rambyte_count = 0
+		rambyte_count += 1
 	
 #Load a ROM File into the RAM
 def load_rom(rom_path):
 	global RAM, ROM_leng
 	
-	#RAM = []
-	#RAM.extend(["00"] * RAM_offset)
+	RAM = []
+	RAM.extend(["00"] * RAM_offset)
+	local_ram_init()
 
-	rom = open(rom_path, "rb")
-	rom_data = rom.read()
-	ROM_leng = len(rom_data)
-	for d in range(0,len(rom_data),1):
-		h = rom_data[d].encode("hex")
-		#h1 = rom_data[d+1].encode("hex")
-		RAM.append(h)
+	try:
+		rom = open(rom_path, "rb")
+		rom_data = rom.read()
+		ROM_leng = len(rom_data)
+		for d in range(0,len(rom_data),1):
+			h = rom_data[d].encode("hex")
+			RAM.append(h)
 		
-	RAM.extend(["00"] * (4096 - len(RAM)))
+		RAM.extend(["00"] * (4096 - len(RAM)))
+	except:
+		print "Can not load this ROM file."
 
 def reset_emulator():	
 	global DISPLAY, STACK, PC, Vx, VI, DT, ST, SP
@@ -250,12 +280,17 @@ def reset_emulator():
 		SP = 0
 		STACK = []
 		PC = RAM_offset
+	
+	load_rom(rom_name)
 		
 #load_rom("15 Puzzles")
-load_rom("ROMs//GUESS")
+#load_rom("ROMs\\BRIX")
 	
 keydown = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+str_key = False
 
+keylayout_init()
+		
 #Game Loop
 while True:
 		
@@ -272,26 +307,77 @@ while True:
 			if event.key == ord('d') and debugger_on == False:
 				debug_out("hex")
 				debugger_on = True
-				
+				print "Debugger ON"
 			elif event.key == ord('d') and debugger_on == True:
 				debugger_on = False
-			if event.key == ord('p') and emu_pause == 0:
+				print "Debugger OFF"
+			if (event.key == ord('p') or event.key == 32) and emu_pause == 0:
 				emu_pause = 1
-			elif event.key == ord('p') and emu_pause == 1:
+				print "PAUSE"
+			elif (event.key == ord('p') or event.key == 32) and emu_pause == 1:
 				emu_pause = 0
+				print "CONTINUE"
 			#Reset
 			if event.key == 283:
 				reset_emulator()
+			#Load new ROM File
 			if event.key == 284:
-				filename = tkFileDialog.askopenfilename()
-				print filename
+				load_ready = False
+				while load_ready == False:
+					load_rom_input = raw_input(os.getcwd() + " >")
+					if load_rom_input == "exit":
+						pygame.quit()
+						sys.exit()
+					elif load_rom_input == "pwd":
+						print
+						print os.getcwdu()
+						print 
+					elif "cd " in load_rom_input:
+						path = load_rom_input.split()
+						os.chdir(path[1])
+					elif load_rom_input == "ls":	
+						for index in os.listdir(os.getcwd()):
+							print index
+					elif "load " in load_rom_input:
+						path = load_rom_input.split()
+						rom_name = path[1]
+						reset_emulator()
+						load_ready = True
+			if event.key == 292:
+				if str_key == True:
+					if MainClockSpeed >= 20:
+						MainClockSpeed -= 10
+				elif MainClockSpeed >= 200:
+					MainClockSpeed -= 100
+				print "Speed:", MainClockSpeed
+			if event.key == 293:
+				if str_key == True:
+					MainClockSpeed += 10
+				else:
+					MainClockSpeed += 100
+				print "Speed:", MainClockSpeed
+			if event.key == 291 or event.key == 109:
+				if MainClockSpeed > 0:
+					Save_MainClockSpeed = MainClockSpeed
+					MainClockSpeed = 0
+					print "Maximum Speed"
+				else:
+					MainClockSpeed = Save_MainClockSpeed
+					print "Speed:", MainClockSpeed
+			if event.key == 290:
+				if keylayout < 1:
+					keylayout += 1
+				else:
+					keylayout = 0
+				keylayout_init()
+				print keylayout
 			
 			if event.key == 256:
 				keydown[0] = 1
 			if event.key == 257:
 				keydown[7] = 1
 			if event.key == 258:
-				keydown[8] = 1
+				keydown[two] = 1
 			if event.key == 259:
 				keydown[9] = 1
 			if event.key == 260:
@@ -303,7 +389,7 @@ while True:
 			if event.key == 263:
 				keydown[1] = 1
 			if event.key == 264:
-				keydown[2] = 1
+				keydown[eight] = 1
 			if event.key == 265:
 				keydown[3] = 1
 			if event.key == 267:
@@ -318,6 +404,9 @@ while True:
 				keydown[14] = 1
 			if event.key == 266:
 				keydown[15] = 1
+				
+			if event.key == 306:
+				str_key = True
 					
 		if event.type == pygame.locals.KEYUP:
 			if event.key == 256:
@@ -325,7 +414,7 @@ while True:
 			if event.key == 257:
 				keydown[7] = 0
 			if event.key == 258:
-				keydown[8] = 0
+				keydown[two] = 0
 			if event.key == 259:
 				keydown[9] = 0
 			if event.key == 260:
@@ -337,7 +426,7 @@ while True:
 			if event.key == 263:
 				keydown[1] = 0
 			if event.key == 264:
-				keydown[2] = 0
+				keydown[eight] = 0
 			if event.key == 265:
 				keydown[3] = 0
 			if event.key == 267:
@@ -352,20 +441,26 @@ while True:
 				keydown[14] = 0
 			if event.key == 266:
 				keydown[15] = 0
+				
+			if event.key == 306:
+				str_key = False
 	
 	#Debugger
 	if debugger_on == True:
 		debug_out("hex")
-		debugger_input = raw_input(hex(PC))
+		debugger_input = raw_input(hex(PC) + " >")
 		if debugger_input == "exit":
 			pygame.quit()
 			sys.exit()
 		elif debugger_input == "dd":
 			debug_out("dez")
+			PC -= 2
 		elif debugger_input == "dh":
 			debug_out("hex")
+			PC -= 2
 		elif debugger_input == "ram":
 			ram_out()
+			PC -= 2
 		elif debugger_input == "run":
 			debugger_on = False
 			
@@ -557,7 +652,7 @@ while True:
 			for bytes in range(1,n+1,1):
 				#print bytes
 				#print sprite
-				for s in range(0, 7, 1):
+				for s in range(0, 8, 1):
 					if x+s > 63:
 						#x = 0
 						break
@@ -660,7 +755,7 @@ while True:
 				regnr = int(high_b[1], 16)
 				for i in range(0, regnr + 1, 1):
 					#print i, RAM[VI + i], hex(Vx[i])
-					RAM[VI + i] = hex(Vx[i])
+					RAM[VI + i] = hex(Vx[i]) #str(Vx[i]).encode("hex")
 			
 			#Fx65 - LD Vx, [I] : Read registers V0 through Vx from memory starting at location I. The interpreter reads values from memory starting at location I into registers V0 through Vx.
 			elif low_b == "65":
