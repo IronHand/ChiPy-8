@@ -28,7 +28,7 @@ MainClockSpeed = 400
 #Debugg Switch
 debugger_on = False
 #Path to the loaded ROM file
-rom_name = ""
+rom_name = "ROMS\\Kaleid"
 #Keyboard Layouts > 0=standart, 1=28switch
 keylayout = 0
 #Keyboard Layout Init - "standart" means the Chip8 Keyboard Standart
@@ -285,6 +285,8 @@ def reset_emulator():
 		
 #load_rom("15 Puzzles")
 #load_rom("ROMS\\BRIX")
+#load_rom("ROMS\\Kaleid")
+#load_rom("ROMS\\Maze")
 	
 keydown = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 str_key = False
@@ -774,9 +776,9 @@ while True:
 	if len(DISPLAY_DIFF) > 0:
 			for pixel in DISPLAY_DIFF:
 				if pixel[2] == 1:
-					pygame.draw.rect(windowSurface, WHITE, pygame.Rect(pixel[0]*pixel_size, pixel[1]*pixel_size, pixel_size, pixel_size), pixel_fill)
+					pygame.draw.rect(windowSurface, WHITE, pygame.Rect(pixel[0]*pixel_size + pixel_size/2, pixel[1]*pixel_size, pixel_size, pixel_size), pixel_fill)
 				else:
-					pygame.draw.rect(windowSurface, BLACK, pygame.Rect(pixel[0]*pixel_size, pixel[1]*pixel_size, pixel_size, pixel_size), pixel_fill)
+					pygame.draw.rect(windowSurface, BLACK, pygame.Rect(pixel[0]*pixel_size + pixel_size/2, pixel[1]*pixel_size, pixel_size, pixel_size), pixel_fill)
 		
 	#Clear Screen
 	#windowSurface.fill(BLACK)
