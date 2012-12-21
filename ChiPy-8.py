@@ -284,7 +284,7 @@ def reset_emulator():
 	load_rom(rom_name)
 		
 #load_rom("15 Puzzles")
-#load_rom("ROMs\\BRIX")
+#load_rom("ROMS\\BRIX")
 	
 keydown = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 str_key = False
@@ -581,9 +581,9 @@ while True:
 					Vx[15] = 1
 				else:
 					Vx[15] = 0
-				Vx[regnr_x] -= Vx[regnr_y]
-				while Vx[regnr_x] < 0:
-					Vx[regnr_x] += 256
+				Vx[regnr_x] -= Vx[regnr_y] & 0xff
+				#while Vx[regnr_x] < 0:
+					#Vx[regnr_x] += 256
 			
 			#8xy6 - SHR Vx {, Vy} : Set Vx = Vx SHR 1. If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 			if low_b[1] == "6":
@@ -599,7 +599,7 @@ while True:
 					Vx[15] = 1
 				else:
 					Vx[15] = 0
-				Vx[regnr_x] = Vx[regnr_y] - Vx[regnr_x]
+				Vx[regnr_x] = (Vx[regnr_y] - Vx[regnr_x]) & 0xff
 			
 			#8xyE - SHL Vx {, Vy} : Set Vx = Vx SHL 1. If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.			
 			if low_b[1] == "e":
