@@ -757,7 +757,7 @@ while True:
 				regnr = int(high_b[1], 16)
 				for i in range(0, regnr + 1, 1):
 					#print i, RAM[VI + i], hex(Vx[i])
-					RAM[VI + i] = hex(Vx[i]) #str(Vx[i]).encode("hex")
+					RAM[VI + i] = format(int(Vx[i]), '02x') #hex(Vx[i]) #str(Vx[i]).encode("hex")
 			
 			#Fx65 - LD Vx, [I] : Read registers V0 through Vx from memory starting at location I. The interpreter reads values from memory starting at location I into registers V0 through Vx.
 			elif low_b == "65":
